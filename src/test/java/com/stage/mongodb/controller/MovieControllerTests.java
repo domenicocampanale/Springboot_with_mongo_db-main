@@ -1,6 +1,5 @@
-package com.stage.mongodb;
+package com.stage.mongodb.controller;
 
-import com.stage.mongodb.controller.MovieController;
 import com.stage.mongodb.dto.MovieDto;
 import com.stage.mongodb.dto.MovieDtoInput;
 import com.stage.mongodb.dto.MoviePatchDto;
@@ -76,7 +75,6 @@ class MovieControllerTest {
         assertThat(movieDtoInputCaptor.getValue()).isEqualTo(input);
     }
 
-
     @Test
     void testUpdateMovie() {
         MovieDtoInput dtoInput = easyRandom.nextObject(MovieDtoInput.class);
@@ -88,7 +86,6 @@ class MovieControllerTest {
         verify(movieService).updateMovie(movieDtoInputCaptor.capture(), idCaptor.capture());
         assertThat(movieDtoInputCaptor.getValue()).isEqualTo(dtoInput);
         assertThat(idCaptor.getValue()).isEqualTo("123");
-
     }
 
     @Test
@@ -102,7 +99,6 @@ class MovieControllerTest {
         verify(movieService).updateMoviePartial(idCaptor.capture(), moviePatchDtoCaptor.capture());
         assertThat(moviePatchDtoCaptor.getValue()).isEqualTo(patchDto);
         assertThat(idCaptor.getValue()).isEqualTo("123");
-
     }
 
     @Test

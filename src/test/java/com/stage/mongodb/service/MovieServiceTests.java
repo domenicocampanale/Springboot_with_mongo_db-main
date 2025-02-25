@@ -1,4 +1,4 @@
-package com.stage.mongodb;
+package com.stage.mongodb.service;
 
 import com.stage.mongodb.dto.MovieDto;
 import com.stage.mongodb.dto.MovieDtoInput;
@@ -8,7 +8,6 @@ import com.stage.mongodb.mapper.MovieMapper;
 import com.stage.mongodb.model.Movie;
 import com.stage.mongodb.repository.MovieRepository;
 import com.stage.mongodb.repository.ReviewRepository;
-import com.stage.mongodb.service.MovieService;
 import org.jeasy.random.EasyRandom;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -147,6 +146,16 @@ class MovieServiceTest {
         verify(movieRepository).save(movieCaptor.capture());
         assertThat(movieCaptor.getValue()).isEqualTo(existingMovie);
     }
+
+    @Test
+    void testUpdateMoviePartial_NotFound() {
+        String id = "invalid-id";
+        MoviePatchDto patchDto = easyRandom.nextObject(MoviePatchDto.class);
+        when(movieRepository.findById(id)).thenReturn(Optional.empty());
+        assertThrows(MovieNotFoundException.class, () -> movieService.updateMoviePartial(id, patchDto));
+        verify(movieRepository).findById(id);
+    }
+
 
     @Test
     void testDeleteMovie() {

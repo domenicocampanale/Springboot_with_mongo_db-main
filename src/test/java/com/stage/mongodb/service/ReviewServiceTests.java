@@ -1,4 +1,4 @@
-package com.stage.mongodb;
+package com.stage.mongodb.service;
 
 import com.stage.mongodb.dto.ReviewDto;
 import com.stage.mongodb.dto.ReviewDtoInput;
@@ -11,7 +11,6 @@ import com.stage.mongodb.model.Movie;
 import com.stage.mongodb.model.Review;
 import com.stage.mongodb.repository.MovieRepository;
 import com.stage.mongodb.repository.ReviewRepository;
-import com.stage.mongodb.service.ReviewService;
 import org.jeasy.random.EasyRandom;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -89,6 +88,20 @@ class ReviewServiceTest {
     }
 
     @Test
+    void testGetReviewByMovieId_NotFound() {
+        String id = "123";
+        Review review = easyRandom.nextObject(Review.class);
+
+        when(reviewRepository.findById(id)).thenReturn(Optional.of(review));
+        when(movieRepository.findById(review.getMovieId())).thenReturn(Optional.empty());
+
+        assertThrows(ReviewNotFoundException.class, () -> reviewService.getReviewById(id));
+
+        verify(movieRepository).findById(review.getMovieId());
+    }
+
+
+    @Test
     void testInsertReview() {
         ReviewDtoInput input = easyRandom.nextObject(ReviewDtoInput.class);
         Review review = easyRandom.nextObject(Review.class);
@@ -99,11 +112,8 @@ class ReviewServiceTest {
         when(reviewMapper.toReviewFromDtoInput(input)).thenReturn(review);
         when(reviewMapper.toReviewDto(review, movie)).thenReturn(reviewDto);
         when(reviewRepository.save(any(Review.class))).thenReturn(review);
-
         ReviewDto result = reviewService.insertReview(input);
-
         assertThat(result).isEqualTo(reviewDto);
-
         verify(reviewRepository).save(reviewCaptor.capture());
         Review capturedReview = reviewCaptor.getValue();
         assertThat(capturedReview).isEqualTo(review);
@@ -116,6 +126,7 @@ class ReviewServiceTest {
         assertThrows(MovieNotFoundException.class, () -> reviewService.insertReview(input));
     }
 
+
     @Test
     void testUpdateReview() {
         String id = "review-id";
@@ -126,11 +137,8 @@ class ReviewServiceTest {
         when(reviewRepository.findById(id)).thenReturn(Optional.of(existingReview));
         when(movieRepository.findById(existingReview.getMovieId())).thenReturn(Optional.of(movie));
         when(reviewMapper.toReviewDto(existingReview, movie)).thenReturn(reviewDto);
-
         ReviewDto result = reviewService.updateReview(updateDto, id);
-
         assertThat(result).isEqualTo(reviewDto);
-
         verify(reviewRepository).save(reviewCaptor.capture());
         Review capturedReview = reviewCaptor.getValue();
         assertThat(capturedReview).isEqualTo(existingReview);
@@ -142,6 +150,19 @@ class ReviewServiceTest {
         ReviewDtoUpdate updateDto = easyRandom.nextObject(ReviewDtoUpdate.class);
         when(reviewRepository.findById(id)).thenReturn(Optional.empty());
         assertThrows(ReviewNotFoundException.class, () -> reviewService.updateReview(updateDto, id));
+    }
+
+    @Test
+    void testUpdateReview_MovieNotFound() {
+        String id = "review-id";
+        ReviewDtoUpdate updateDto = easyRandom.nextObject(ReviewDtoUpdate.class);
+        Review existingReview = easyRandom.nextObject(Review.class);
+
+        // Simula il caso in cui la recensione esista, ma il film non venga trovato
+        when(reviewRepository.findById(id)).thenReturn(Optional.of(existingReview));
+        when(movieRepository.findById(existingReview.getMovieId())).thenReturn(Optional.empty());
+
+        assertThrows(ReviewNotFoundException.class, () -> reviewService.updateReview(updateDto, id)); // Lancia eccezione
     }
 
 
@@ -164,6 +185,20 @@ class ReviewServiceTest {
         verify(reviewRepository).save(existingReview);
         verify(movieRepository).findById(existingReview.getMovieId());
         verify(reviewMapper).toReviewDto(existingReview, existingMovie);
+    }
+
+    @Test
+    void testUpdateReviewFromPatchDto_MovieNotFound() {
+        String id = "review-id";
+        ReviewPatchDto patchDto = easyRandom.nextObject(ReviewPatchDto.class);
+        patchDto.setComment(null); // Impostiamo un campo null per il test
+        Review existingReview = easyRandom.nextObject(Review.class);
+
+        // Simula il caso in cui la recensione esista, ma il film non venga trovato
+        when(reviewRepository.findById(id)).thenReturn(Optional.of(existingReview));
+        when(movieRepository.findById(existingReview.getMovieId())).thenReturn(Optional.empty());
+
+        assertThrows(ReviewNotFoundException.class, () -> reviewService.updateReviewPartial(id, patchDto)); // Lancia eccezione
     }
 
 

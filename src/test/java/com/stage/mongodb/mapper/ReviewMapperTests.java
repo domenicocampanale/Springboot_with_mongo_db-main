@@ -1,11 +1,9 @@
-package com.stage.mongodb;
+package com.stage.mongodb.mapper;
 
 import com.stage.mongodb.dto.ReviewDto;
 import com.stage.mongodb.dto.ReviewDtoInput;
 import com.stage.mongodb.dto.ReviewDtoUpdate;
 import com.stage.mongodb.dto.ReviewPatchDto;
-import com.stage.mongodb.mapper.MovieMapper;
-import com.stage.mongodb.mapper.ReviewMapper;
 import com.stage.mongodb.model.Movie;
 import com.stage.mongodb.model.Review;
 import org.jeasy.random.EasyRandom;
@@ -23,11 +21,10 @@ class ReviewMapperTests {
 
     private ReviewMapper reviewMapper;
     private EasyRandom easyRandom;
-    private MovieMapper movieMapper;
-
 
     @BeforeAll
     void setUp() {
+        MovieMapper movieMapper = new MovieMapper();
         reviewMapper = new ReviewMapper(movieMapper);
         easyRandom = new EasyRandom();
     }
@@ -47,7 +44,6 @@ class ReviewMapperTests {
         assertThat(review.getComment()).isEqualTo(reviewDto.getComment());
     }
 
-
     @Test
     void testToReviewDtoWithMovieDto() {
 
@@ -62,7 +58,6 @@ class ReviewMapperTests {
         assertThat(reviewDto.getUpdateDate()).isNotNull();
         assertThat(reviewDto.getComment()).isNotNull();
         assertThat(reviewDto.getMovieDto()).isNotNull();
-
         assertThat(review.getRating()).isEqualTo(reviewDto.getRating());
         assertThat(review.getComment()).isEqualTo(reviewDto.getComment());
     }
@@ -77,7 +72,6 @@ class ReviewMapperTests {
         assertThat(reviewDtoInput.getMovieId()).isEqualTo(review.getMovieId());
         assertThat(reviewDtoInput.getRating()).isEqualTo(review.getRating());
         assertThat(reviewDtoInput.getComment()).isEqualTo(review.getComment());
-
     }
 
     @Test
@@ -95,15 +89,12 @@ class ReviewMapperTests {
         assertThat(reviewDtoInput.getComment()).isEqualTo(existingReview.getComment());
     }
 
-
     @Test
     void testUpdateReviewFromDtoUpdate() {
 
         Review existingReview = easyRandom.nextObject(Review.class);
         ReviewDtoUpdate reviewDtoUpdate = easyRandom.nextObject(ReviewDtoUpdate.class);
-
         reviewMapper.updateReviewFromDtoUpdate(reviewDtoUpdate, existingReview);
-
         assertThat(existingReview.getId()).isNotNull();
         assertThat(existingReview.getMovieId()).isNotNull();
         assertThat(existingReview.getComment()).isNotNull();
@@ -113,21 +104,6 @@ class ReviewMapperTests {
         assertThat(reviewDtoUpdate.getRating()).isEqualTo(existingReview.getRating());
         assertThat(reviewDtoUpdate.getComment()).isEqualTo(existingReview.getComment());
     }
-
-
-    @Test
-    void testUpdateReviewFromDtoNullUpdate() {
-
-        Review existingReview = easyRandom.nextObject(Review.class);
-        reviewMapper.updateReviewFromDtoUpdate(null, existingReview);
-        assertThat(existingReview.getId()).isNotNull();
-        assertThat(existingReview.getMovieId()).isNotNull();
-        assertThat(existingReview.getComment()).isNotNull();
-        assertThat(existingReview.getInsertDate()).isNotNull();
-        assertThat(existingReview.getUpdateDate()).isNotNull();
-
-    }
-
 
     @Test
     void testUpdateReviewFromPatchDto() {
@@ -141,35 +117,7 @@ class ReviewMapperTests {
         assertThat(existingReview.getComment()).isNotNull();
         assertThat(existingReview.getInsertDate()).isNotNull();
         assertThat(existingReview.getUpdateDate()).isNotNull();
-
     }
-
-    @Test
-    void testUpdateReviewFromNullPatchDto() {
-
-        Review existingReview = easyRandom.nextObject(Review.class);
-        reviewMapper.updateReviewFromPatchDto(null, existingReview);
-        assertThat(existingReview.getId()).isNotNull();
-        assertThat(existingReview.getMovieId()).isNotNull();
-        assertThat(existingReview.getComment()).isNotNull();
-        assertThat(existingReview.getInsertDate()).isNotNull();
-        assertThat(existingReview.getUpdateDate()).isNotNull();
-
-    }
-
-    @Test
-    void testToReviewFromDtoInput_NullInput() {
-        Review review = reviewMapper.toReviewFromDtoInput(null);
-        assertThat(review).isNull();
-    }
-
-    @Test
-    void testUpdateReviewFromDtoInput_NullInput() {
-        Review existingReview = easyRandom.nextObject(Review.class);
-        reviewMapper.updateReviewFromDtoInput(null, existingReview);
-        assertThat(existingReview).isNotNull();
-    }
-
 
     @Test
     void testListOfReviewsDto() {
@@ -181,13 +129,11 @@ class ReviewMapperTests {
         assertThat(reviewsDto.size()).isEqualTo(2);
     }
 
-
     @Test
-    void testformatData() {
+    void testFormatData() {
         Instant data = Instant.now();
         String stringData = reviewMapper.formatData(data);
-        assertThat(stringData).isNotNull();
+        assertThat(stringData).matches("\\d{4}-\\d{2}-\\d{2}.*");
     }
-
 
 }

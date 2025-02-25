@@ -97,7 +97,6 @@ public class MovieController {
             })
 
     public ResponseEntity<MovieDto> insert(@Valid @RequestBody MovieDtoInput movieDtoInput) {
-        log.info("Request for inserting movie ");
         MovieDto movieDto = movieService.insertMovie(movieDtoInput);
         return ResponseEntity.status(HttpStatus.CREATED).body(movieDto);
 

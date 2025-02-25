@@ -130,7 +130,7 @@ public class ReviewService {
         });
 
         return reviewMapper.toReviewDto(existingReview, existingMovie);
-    }
+    }    
 
     public void deleteReview(String id) {
         if (!reviewRepository.existsById(id)) {

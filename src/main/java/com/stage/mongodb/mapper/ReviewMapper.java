@@ -48,9 +48,6 @@ public class ReviewMapper {
     }
 
     public Review toReviewFromDtoInput(ReviewDtoInput reviewDtoInput) {
-        if (reviewDtoInput == null) {
-            return null;
-        }
 
         return Review.builder()
                 .movieId(reviewDtoInput.getMovieId())
@@ -61,9 +58,6 @@ public class ReviewMapper {
 
 
     public void updateReviewFromDtoInput(ReviewDtoInput reviewDtoInput, Review review) {
-        if (reviewDtoInput == null) {
-            return;
-        }
 
         review.setMovieId(reviewDtoInput.getMovieId());
         review.setRating(reviewDtoInput.getRating());
@@ -72,9 +66,6 @@ public class ReviewMapper {
 
 
     public void updateReviewFromDtoUpdate(ReviewDtoUpdate reviewDtoUpdate, Review review) {
-        if (reviewDtoUpdate == null) {
-            return;
-        }
 
         review.setRating(reviewDtoUpdate.getRating());
         review.setComment(reviewDtoUpdate.getComment());
@@ -82,28 +73,20 @@ public class ReviewMapper {
 
 
     public void updateReviewFromPatchDto(ReviewPatchDto patchDto, Review review) {
-        if (patchDto == null) {
-            return;
-        }
+
         Optional.of(patchDto.getRating())
                 .ifPresent(review::setRating);
         Optional.ofNullable(patchDto.getComment())
                 .ifPresent(review::setComment);
     }
 
-
     public String formatData(Instant data) {
-
-        if (data == null) {
-            return null;
-        }
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         return data.atZone(java.time.ZoneId.systemDefault()).format(formatter);
     }
 
     public List<ReviewDto> listOfReviewsDto(List<Review> reviews, List<Movie> movies) {
-
 
         MovieMapper movieMapper = new MovieMapper();
 

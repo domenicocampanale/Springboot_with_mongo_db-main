@@ -1,6 +1,5 @@
-package com.stage.mongodb;
+package com.stage.mongodb.controller;
 
-import com.stage.mongodb.controller.ReviewController;
 import com.stage.mongodb.dto.ReviewDto;
 import com.stage.mongodb.dto.ReviewDtoInput;
 import com.stage.mongodb.dto.ReviewDtoUpdate;

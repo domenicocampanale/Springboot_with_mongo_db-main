@@ -1,9 +1,8 @@
-package com.stage.mongodb;
+package com.stage.mongodb.mapper;
 
 import com.stage.mongodb.dto.MovieDto;
 import com.stage.mongodb.dto.MovieDtoInput;
 import com.stage.mongodb.dto.MoviePatchDto;
-import com.stage.mongodb.mapper.MovieMapper;
 import com.stage.mongodb.model.Movie;
 import org.jeasy.random.EasyRandom;
 import org.junit.jupiter.api.BeforeAll;
@@ -64,24 +63,10 @@ class MovieMapperTests {
 
 
     @Test
-    void testUpdateMovieFromDtoInput_NullInput() {
-        Movie existingMovie = easyRandom.nextObject(Movie.class);
-        movieMapper.updateMovieFromDtoInput(null, existingMovie);
-        assertThat(existingMovie).isNotNull();
-    }
-
-    @Test
-    void testUpdateMovieFromPatchDto_NullInput() {
-        Movie existingMovie = easyRandom.nextObject(Movie.class);
-        movieMapper.updateMovieFromPatchDto(null, existingMovie);
-        assertThat(existingMovie).isNotNull();
-    }
-
-    @Test
-    void testformatData() {
+    void testFormatData() {
         Instant data = Instant.now();
         String stringData = movieMapper.formatData(data);
-        assertThat(stringData).isNotNull();
+        assertThat(stringData).matches("\\d{4}-\\d{2}-\\d{2}.*");
     }
 
 
