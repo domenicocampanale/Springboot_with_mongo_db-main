@@ -107,7 +107,6 @@ class ReviewServiceTest {
         Review review = easyRandom.nextObject(Review.class);
         ReviewDto reviewDto = easyRandom.nextObject(ReviewDto.class);
         Movie movie = easyRandom.nextObject(Movie.class);
-        when(movieRepository.existsById(input.getMovieId())).thenReturn(true);
         when(movieRepository.findById(input.getMovieId())).thenReturn(Optional.ofNullable(movie));
         when(reviewMapper.toReviewFromDtoInput(input)).thenReturn(review);
         when(reviewMapper.toReviewDto(review, movie)).thenReturn(reviewDto);
@@ -122,7 +121,6 @@ class ReviewServiceTest {
     @Test
     void testInsertReview_MovieNotFound() {
         ReviewDtoInput input = easyRandom.nextObject(ReviewDtoInput.class);
-        when(movieRepository.existsById(input.getMovieId())).thenReturn(false);
         assertThrows(MovieNotFoundException.class, () -> reviewService.insertReview(input));
     }
 

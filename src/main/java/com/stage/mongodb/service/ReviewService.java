@@ -65,11 +65,11 @@ public class ReviewService {
 
     public ReviewDto insertReview(ReviewDtoInput reviewDtoInput) {
 
-        if (!movieRepository.existsById(reviewDtoInput.getMovieId())) {
-            String errorMessage = "Movie with ID " + reviewDtoInput.getMovieId() + " not found for the review ";
+        Movie existingMovie = movieRepository.findById(reviewDtoInput.getMovieId()).orElseThrow(() -> {
+            String errorMessage = ("Movie with ID " + reviewDtoInput.getMovieId() + " does not exist");
             log.error(errorMessage);
-            throw new MovieNotFoundException(errorMessage);
-        }
+            return new MovieNotFoundException(errorMessage);
+        });
 
         log.info("Attempting to insert review: {}", reviewDtoInput);
         Review review = reviewMapper.toReviewFromDtoInput(reviewDtoInput);
@@ -79,12 +79,6 @@ public class ReviewService {
 
         reviewRepository.save(review);
         log.info("Review with ID {} correctly inserted", review.getId());
-
-        Movie existingMovie = movieRepository.findById(reviewDtoInput.getMovieId()).orElseThrow(() -> {
-            String errorMessage = ("Movie with ID " + reviewDtoInput.getMovieId() + " does not exist");
-            log.error(errorMessage);
-            return new ReviewNotFoundException(errorMessage);
-        });
 
         return reviewMapper.toReviewDto(review, existingMovie);
     }
@@ -130,7 +124,7 @@ public class ReviewService {
         });
 
         return reviewMapper.toReviewDto(existingReview, existingMovie);
-    }    
+    }
 
     public void deleteReview(String id) {
         if (!reviewRepository.existsById(id)) {

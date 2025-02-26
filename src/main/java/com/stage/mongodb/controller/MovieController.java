@@ -49,7 +49,6 @@ public class MovieController {
         return ResponseEntity.ok(moviesDto);
     }
 
-
     @GetMapping(params = "id")
     @Operation(description = "Find movie by corresponding ID")
     @ApiResponses(value = {
@@ -68,7 +67,6 @@ public class MovieController {
         log.info("Request for showing movie with id {} ", id);
         MovieDto movieDto = movieService.getMovieById(id);
         return ResponseEntity.status(HttpStatus.OK).body(movieDto);
-
     }
 
     @PostMapping
@@ -99,7 +97,6 @@ public class MovieController {
     public ResponseEntity<MovieDto> insert(@Valid @RequestBody MovieDtoInput movieDtoInput) {
         MovieDto movieDto = movieService.insertMovie(movieDtoInput);
         return ResponseEntity.status(HttpStatus.CREATED).body(movieDto);
-
     }
 
     @PutMapping(params = "id")
