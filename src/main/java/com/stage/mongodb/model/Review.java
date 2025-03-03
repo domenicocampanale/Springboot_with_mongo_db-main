@@ -14,7 +14,6 @@ import java.time.Instant;
 @Setter
 public class Review {
 
-
     @Id
     private String id;
     private String movieId;

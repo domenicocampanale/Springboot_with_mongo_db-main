@@ -8,5 +8,4 @@ import org.springframework.stereotype.Repository;
 public interface ReviewRepository extends MongoRepository<Review, String> {
 
     void deleteByMovieId(String movieId);
-
 }

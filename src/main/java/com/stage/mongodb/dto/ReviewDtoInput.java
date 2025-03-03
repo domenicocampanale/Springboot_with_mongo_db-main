@@ -1,7 +1,10 @@
 package com.stage.mongodb.dto;
 
 import jakarta.validation.constraints.*;
-import lombok.*;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
 @EqualsAndHashCode
 @Builder

@@ -1,4 +1,4 @@
-package com.stage.mongodb.integration;
+package com.stage.mongodb.E2E;
 
 import com.stage.mongodb.dto.ReviewDto;
 import com.stage.mongodb.dto.ReviewDtoInput;
@@ -11,9 +11,11 @@ import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.context.ApplicationContext;
+import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
+import org.testcontainers.containers.MongoDBContainer;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.time.Instant;
 import java.util.List;
@@ -22,13 +24,19 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@Testcontainers
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class ReviewIntegrationTest {
+public class ReviewE2ETest {
+
+    @ServiceConnection
+    static MongoDBContainer mongoDBContainer = new MongoDBContainer("mongo:latest");
 
     @Autowired
     private TestRestTemplate restTemplate;
+
     @Autowired
     private ReviewRepository reviewRepository;
+
     @Autowired
     private MovieRepository movieRepository;
 
@@ -38,7 +46,7 @@ public class ReviewIntegrationTest {
     private String reviewId;
 
     @BeforeAll
-    void setup(ApplicationContext applicationContext) {
+    void setup() {
 
         reviewRepository.deleteAll();
         movieRepository.deleteAll();

@@ -13,9 +13,7 @@ import java.util.Optional;
 @Component
 public class MovieMapper {
 
-
     public MovieDto toMovieDto(Movie movie) {
-
 
         return MovieDto.builder()
                 .id(movie.getId())
@@ -26,9 +24,7 @@ public class MovieMapper {
                 .build();
     }
 
-
     public Movie toMovieFromDtoInput(MovieDtoInput movieDtoInput) {
-
 
         return Movie.builder()
                 .title(movieDtoInput.getTitle())
@@ -38,11 +34,9 @@ public class MovieMapper {
 
     public void updateMovieFromDtoInput(MovieDtoInput movieDtoInput, Movie movie) {
 
-
         movie.setTitle(movieDtoInput.getTitle());
         movie.setReleaseDate(movieDtoInput.getReleaseDate());
     }
-
 
     public void updateMovieFromPatchDto(MoviePatchDto patchDto, Movie movie) {
 
@@ -51,9 +45,7 @@ public class MovieMapper {
 
         Optional.ofNullable(patchDto.getReleaseDate())
                 .ifPresent(movie::setReleaseDate);
-
     }
-
 
     public String formatData(Instant data) {
 

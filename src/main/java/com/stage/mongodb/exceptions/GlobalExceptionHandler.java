@@ -17,7 +17,6 @@ import java.time.format.DateTimeFormatter;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
     private String getCurrentFormattedDate() {

@@ -7,13 +7,15 @@ import com.stage.mongodb.dto.MovieDtoInput;
 import com.stage.mongodb.dto.MoviePatchDto;
 import com.stage.mongodb.exceptions.MovieNotFoundException;
 import com.stage.mongodb.service.MovieService;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.junit.jupiter.api.TestInstance;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,9 +26,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(MovieController.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class MovieControllerComponentTest {
 
-    @Autowired
     private MockMvc mockMvc;
 
     private ObjectMapper objectMapper;
@@ -38,10 +40,12 @@ public class MovieControllerComponentTest {
     private MovieDtoInput input;
     private MoviePatchDto patchDto;
 
-    @BeforeEach
-    void setup() {
+    @BeforeAll
+    void setup(WebApplicationContext webApplicationContext) {
 
         objectMapper = new ObjectMapper();
+
+        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
 
         movie = MovieDto.builder()
                 .id("123")

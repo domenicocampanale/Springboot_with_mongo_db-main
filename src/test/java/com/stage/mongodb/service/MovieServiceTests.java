@@ -22,6 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
+
 class MovieServiceTest {
 
     @Mock
@@ -111,17 +112,14 @@ class MovieServiceTest {
         assertThat(movieCaptor.getValue()).isEqualTo(existingMovie);
     }
 
-
     @Test
     void testGetEmptyMovies() {
-
         when(movieRepository.findAll()).thenReturn(Collections.emptyList());
         List<MovieDto> result = movieService.getMovies();
         assertThat(result).isEmpty();
         verify(movieRepository).findAll();
         verify(movieMapper, never()).toMovieDto(any(Movie.class));
     }
-
 
     @Test
     void testUpdateMovie_NotFound() {
@@ -155,7 +153,6 @@ class MovieServiceTest {
         assertThrows(MovieNotFoundException.class, () -> movieService.updateMoviePartial(id, patchDto));
         verify(movieRepository).findById(id);
     }
-
 
     @Test
     void testDeleteMovie() {

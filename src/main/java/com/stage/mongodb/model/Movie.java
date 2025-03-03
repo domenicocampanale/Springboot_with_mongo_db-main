@@ -14,7 +14,6 @@ import java.time.Instant;
 @Setter
 public class Movie {
 
-
     @Id
     private String id;
     private String title;

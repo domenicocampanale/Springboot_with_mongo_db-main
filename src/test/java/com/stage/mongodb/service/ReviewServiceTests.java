@@ -12,10 +12,10 @@ import com.stage.mongodb.model.Review;
 import com.stage.mongodb.repository.MovieRepository;
 import com.stage.mongodb.repository.ReviewRepository;
 import org.jeasy.random.EasyRandom;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.mockito.*;
-
+import org.junit.jupiter.api.BeforeEach;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -100,7 +100,6 @@ class ReviewServiceTest {
         verify(movieRepository).findById(review.getMovieId());
     }
 
-
     @Test
     void testInsertReview() {
         ReviewDtoInput input = easyRandom.nextObject(ReviewDtoInput.class);
@@ -123,7 +122,6 @@ class ReviewServiceTest {
         ReviewDtoInput input = easyRandom.nextObject(ReviewDtoInput.class);
         assertThrows(MovieNotFoundException.class, () -> reviewService.insertReview(input));
     }
-
 
     @Test
     void testUpdateReview() {
@@ -156,13 +154,11 @@ class ReviewServiceTest {
         ReviewDtoUpdate updateDto = easyRandom.nextObject(ReviewDtoUpdate.class);
         Review existingReview = easyRandom.nextObject(Review.class);
 
-        // Simula il caso in cui la recensione esista, ma il film non venga trovato
         when(reviewRepository.findById(id)).thenReturn(Optional.of(existingReview));
         when(movieRepository.findById(existingReview.getMovieId())).thenReturn(Optional.empty());
 
         assertThrows(ReviewNotFoundException.class, () -> reviewService.updateReview(updateDto, id)); // Lancia eccezione
     }
-
 
     @Test
     void testUpdateReviewFromPatchDto() {
@@ -199,7 +195,6 @@ class ReviewServiceTest {
         assertThrows(ReviewNotFoundException.class, () -> reviewService.updateReviewPartial(id, patchDto)); // Lancia eccezione
     }
 
-
     @Test
     void testDeleteReview() {
         String id = "review-id";
@@ -219,7 +214,6 @@ class ReviewServiceTest {
         when(reviewRepository.existsById(id)).thenReturn(false);
         assertThrows(ReviewNotFoundException.class, () -> reviewService.deleteReview(id));
     }
-
 
     @Test
     void testGetEmptyReviews() {

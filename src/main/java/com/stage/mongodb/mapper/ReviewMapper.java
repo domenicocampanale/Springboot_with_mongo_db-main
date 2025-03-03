@@ -56,7 +56,6 @@ public class ReviewMapper {
                 .build();
     }
 
-
     public void updateReviewFromDtoInput(ReviewDtoInput reviewDtoInput, Review review) {
 
         review.setMovieId(reviewDtoInput.getMovieId());
@@ -64,13 +63,11 @@ public class ReviewMapper {
         review.setComment(reviewDtoInput.getComment());
     }
 
-
     public void updateReviewFromDtoUpdate(ReviewDtoUpdate reviewDtoUpdate, Review review) {
 
         review.setRating(reviewDtoUpdate.getRating());
         review.setComment(reviewDtoUpdate.getComment());
     }
-
 
     public void updateReviewFromPatchDto(ReviewPatchDto patchDto, Review review) {
 

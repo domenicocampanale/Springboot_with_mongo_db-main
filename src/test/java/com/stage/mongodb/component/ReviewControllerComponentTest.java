@@ -6,13 +6,15 @@ import com.stage.mongodb.dto.*;
 import com.stage.mongodb.exceptions.MovieNotFoundException;
 import com.stage.mongodb.exceptions.ReviewNotFoundException;
 import com.stage.mongodb.service.ReviewService;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.junit.jupiter.api.TestInstance;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,28 +25,30 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(ReviewController.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class ReviewControllerComponentTest {
 
-    @Autowired
+
     private MockMvc mockMvc;
 
-    @Autowired
     private ObjectMapper objectMapper;
 
     @MockitoBean
     private ReviewService reviewService;
 
-    private MovieDto movieDto;
     private ReviewDto review;
     private ReviewDtoInput input;
     private ReviewDtoUpdate update;
     private ReviewPatchDto patch;
 
+    @BeforeAll
+    void setUp(WebApplicationContext webApplicationContext) {
 
-    @BeforeEach
-    void setUp() {
+        objectMapper = new ObjectMapper();
 
-        movieDto = MovieDto.builder()
+        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+
+        MovieDto movieDto = MovieDto.builder()
                 .id("m1")
                 .title("Inception")
                 .releaseDate("2010-07-16")
