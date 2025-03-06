@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Review Details</title>
+    <style>
+        body, h1, p, a {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: #f4f4f9;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 36px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .movie-details {
+            background-color: #fff;
+            margin: 0 auto;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            width: 60%;
+            text-align: center;
+        }
+
+        .movie-details p {
+            font-size: 20px;
+            margin: 10px 0;
+        }
+
+        .movie-details span {
+            font-weight: bold;
+            color: #4CAF50;
+        }
+
+        div {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        a {
+            font-size: 20px;
+            color: #fff;
+            background-color: #4CAF50;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        a:hover {
+            background-color: #45a049;
+        }
+
+        .navigation-links {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .navigation-links a {
+            font-size: 20px;
+            color: #fff;
+            background-color: #4CAF50;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .navigation-links a:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Review Details</h1>
+
+<div class="movie-details">
+    <p>Review ID: <span th:text="${review.id}"></span></p>
+    <p>Rating: <span th:text="${review.rating}"></span></p>
+    <p>Comment: <span th:text="${review.comment}"></span></p>
+    <p>Movie ID: <span th:text="${review.movieDto.id}"></span></p>
+    <p>Movie: <span th:text="${review.movieDto.title}"></span></p>
+    <p>Movie's release date: <span th:text="${review.movieDto.releaseDate}"></span></p>
+</div>
+
+<div class="navigation-links">
+    <a href="/view/review/home">Home page</a>
+</div>
+
+</body>
+</html>

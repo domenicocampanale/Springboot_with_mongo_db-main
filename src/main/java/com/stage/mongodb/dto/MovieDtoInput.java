@@ -23,5 +23,4 @@ public class MovieDtoInput {
     @Pattern(regexp = "^\\d{4}-\\d{2}-\\d{2}$", message = "The release date must follow the format YYYY-MM-DD")
     private String releaseDate;
 
-
 }

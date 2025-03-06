@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Movie</title>
+    <style>
+
+        body, h1, p, label, input, button, a {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: #f4f4f9;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 36px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .movie-form {
+            background-color: #fff;
+            margin: 0 auto;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            width: 60%;
+            text-align: center;
+        }
+
+        .movie-form div {
+            margin-bottom: 20px;
+        }
+
+        .movie-form label {
+            font-size: 20px;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .movie-form input {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .movie-form button {
+            font-size: 20px;
+            color: #fff;
+            background-color: #4CAF50;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .movie-form button:hover {
+            background-color: #45a049;
+        }
+
+
+        .error {
+            color: red;
+            font-size: 14px;
+        }
+
+
+        .navigation-links {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .navigation-links a {
+            font-size: 20px;
+            color: #fff;
+            background-color: #4CAF50;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .navigation-links a:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Add New Movie</h1>
+
+
+<form th:action="@{/view/movie/add}" th:object="${movieDtoInput}" method="post" class="movie-form">
+
+
+    <div>
+        <label for="title">Movie's title:</label>
+        <input type="text" th:field="*{title}" id="title" placeholder="Insert movie's title" required>
+
+        <div th:if="${#fields.hasErrors('title')}" class="error">
+            <p th:each="err : ${#fields.errors('title')}" th:text="${err}"></p>
+        </div>
+    </div>
+
+
+    <div>
+        <label for="releaseDate">Movie's release date (YYYY-MM-DD):</label>
+        <input type="text" th:field="*{releaseDate}" id="releaseDate" placeholder="Insert movie's release date"
+               required>
+
+        <div th:if="${#fields.hasErrors('releaseDate')}" class="error">
+            <p th:each="err : ${#fields.errors('releaseDate')}" th:text="${err}"></p>
+        </div>
+    </div>
+
+
+    <div>
+        <button type="submit">Add movie</button>
+    </div>
+
+
+    <div th:if="${errorMessage != null}" class="error">
+        <p th:text="${errorMessage}"></p>
+    </div>
+
+    <div class="navigation-links">
+        <a href="/view/movie/home">Home page</a>
+    </div>
+
+</form>
+
+</body>
+</html>

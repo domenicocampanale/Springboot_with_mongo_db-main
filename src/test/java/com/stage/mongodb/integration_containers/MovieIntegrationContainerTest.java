@@ -1,4 +1,4 @@
-package com.stage.mongodb.integration;
+package com.stage.mongodb.integration_containers;
 
 import com.stage.mongodb.dto.MovieDtoInput;
 import com.stage.mongodb.dto.MoviePatchDto;
@@ -10,7 +10,10 @@ import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.test.context.ActiveProfiles;
+import org.testcontainers.containers.MongoDBContainer;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.util.List;
 
@@ -20,9 +23,13 @@ import static org.hamcrest.Matchers.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
+@Testcontainers
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class MovieIntegrationTest {
+public class MovieIntegrationContainerTest {
+
+    @ServiceConnection
+    static MongoDBContainer mongoDBContainer = new MongoDBContainer("mongo:latest");
 
     @LocalServerPort
     private int port;

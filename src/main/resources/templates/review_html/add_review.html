@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Review</title>
+    <style>
+        body, h1, p, label, input, button, a {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: #f4f4f9;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 36px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .movie-form {
+            background-color: #fff;
+            margin: 0 auto;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            width: 60%;
+            text-align: center;
+        }
+
+        .movie-form div {
+            margin-bottom: 20px;
+        }
+
+        .movie-form label {
+            font-size: 20px;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .movie-form input {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .movie-form button {
+            font-size: 20px;
+            color: #fff;
+            background-color: #4CAF50;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .movie-form button:hover {
+            background-color: #45a049;
+        }
+
+        .error {
+            color: red;
+            font-size: 14px;
+        }
+
+        .navigation-links {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .navigation-links a {
+            font-size: 20px;
+            color: #fff;
+            background-color: #4CAF50;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .navigation-links a:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Add new Review</h1>
+
+<form th:action="@{/view/review/add}" th:object="${reviewDtoInput}" method="post" class="movie-form">
+    <div>
+        <label for="rating">Rating</label>
+        <input type="number" id="rating" th:field="*{rating}" name="rating" required/>
+        <div th:if="${#fields.hasErrors('rating')}" class="error">
+            <p th:each="err : ${#fields.errors('rating')}" th:text="${err}"></p>
+        </div>
+    </div>
+
+    <div>
+        <label for="comment">Comment</label>
+        <input type="text" id="comment" th:field="*{comment}" name="comment" required/>
+        <div th:if="${#fields.hasErrors('comment')}" class="error">
+            <p th:each="err : ${#fields.errors('comment')}" th:text="${err}"></p>
+        </div>
+    </div>
+
+    <div>
+        <label for="movieId">Movie Id</label>
+        <input type="text" id="movieId" th:field="*{movieId}" name="movieId" required/>
+        <div th:if="${#fields.hasErrors('movieId')}" class="error">
+            <p th:each="err : ${#fields.errors('movieId')}" th:text="${err}"></p>
+        </div>
+    </div>
+
+    <button type="submit">Add review</button>
+
+    <div th:if="${errorMessage != null}" class="error">
+        <p th:text="${errorMessage}"></p>
+    </div>
+
+    <div class="navigation-links">
+        <a href="/view/review/home">Home page</a>
+    </div>
+</form>
+
+</body>
+</html>

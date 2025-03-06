@@ -1,4 +1,4 @@
-package com.stage.mongodb.integration;
+package com.stage.mongodb.integration_containers;
 
 import com.stage.mongodb.dto.ReviewDtoInput;
 import com.stage.mongodb.dto.ReviewDtoUpdate;
@@ -12,6 +12,9 @@ import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
+import org.testcontainers.containers.MongoDBContainer;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.time.Instant;
 
@@ -21,8 +24,12 @@ import static org.hamcrest.Matchers.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@Testcontainers
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class ReviewIntegrationTest {
+public class ReviewIntegrationContainerTest {
+
+    @ServiceConnection
+    static MongoDBContainer mongoDBContainer = new MongoDBContainer("mongo:latest");
 
     @LocalServerPort
     private int port;
