@@ -5,8 +5,10 @@ import com.stage.mongodb.dto.ReviewDtoInput;
 import com.stage.mongodb.dto.ReviewDtoUpdate;
 import com.stage.mongodb.dto.ReviewPatchDto;
 import com.stage.mongodb.service.ReviewService;
+import com.stage.mongodb.utils.SpacedDisplayNameGenerator;
 import org.jeasy.random.EasyRandom;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
 import org.springframework.http.HttpStatus;
@@ -17,7 +19,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-
+@DisplayNameGeneration(SpacedDisplayNameGenerator.class)
 class ReviewControllerTest {
 
     @Mock

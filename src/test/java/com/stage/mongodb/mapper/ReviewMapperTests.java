@@ -6,8 +6,10 @@ import com.stage.mongodb.dto.ReviewDtoUpdate;
 import com.stage.mongodb.dto.ReviewPatchDto;
 import com.stage.mongodb.model.Movie;
 import com.stage.mongodb.model.Review;
+import com.stage.mongodb.utils.SpacedDisplayNameGenerator;
 import org.jeasy.random.EasyRandom;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
@@ -17,6 +19,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@DisplayNameGeneration(SpacedDisplayNameGenerator.class)
 class ReviewMapperTests {
 
     private ReviewMapper reviewMapper;

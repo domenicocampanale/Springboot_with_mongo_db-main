@@ -7,7 +7,9 @@ import com.stage.mongodb.dto.MovieDtoInput;
 import com.stage.mongodb.dto.MoviePatchDto;
 import com.stage.mongodb.exceptions.MovieNotFoundException;
 import com.stage.mongodb.service.MovieService;
+import com.stage.mongodb.utils.SpacedDisplayNameGenerator;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -27,6 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(MovieController.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@DisplayNameGeneration(SpacedDisplayNameGenerator.class)
 public class MovieControllerComponentTest {
 
     private MockMvc mockMvc;

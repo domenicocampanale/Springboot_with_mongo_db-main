@@ -11,11 +11,13 @@ import com.stage.mongodb.model.Movie;
 import com.stage.mongodb.model.Review;
 import com.stage.mongodb.repository.MovieRepository;
 import com.stage.mongodb.repository.ReviewRepository;
+import com.stage.mongodb.utils.SpacedDisplayNameGenerator;
 import org.jeasy.random.EasyRandom;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
-import org.mockito.*;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.Test;
+import org.mockito.*;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -24,7 +26,7 @@ import java.util.stream.Collectors;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
-
+@DisplayNameGeneration(SpacedDisplayNameGenerator.class)
 class ReviewServiceTest {
 
     @Mock

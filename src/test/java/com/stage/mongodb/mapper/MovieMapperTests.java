@@ -4,8 +4,10 @@ import com.stage.mongodb.dto.MovieDto;
 import com.stage.mongodb.dto.MovieDtoInput;
 import com.stage.mongodb.dto.MoviePatchDto;
 import com.stage.mongodb.model.Movie;
+import com.stage.mongodb.utils.SpacedDisplayNameGenerator;
 import org.jeasy.random.EasyRandom;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
@@ -14,6 +16,7 @@ import java.time.Instant;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@DisplayNameGeneration(SpacedDisplayNameGenerator.class)
 class MovieMapperTests {
 
     private MovieMapper movieMapper;

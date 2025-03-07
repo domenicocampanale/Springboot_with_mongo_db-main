@@ -6,6 +6,7 @@ import com.stage.mongodb.dto.ReviewPatchDto;
 import com.stage.mongodb.model.Movie;
 import com.stage.mongodb.repository.MovieRepository;
 import com.stage.mongodb.repository.ReviewRepository;
+import com.stage.mongodb.utils.SpacedDisplayNameGenerator;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.*;
@@ -26,6 +27,7 @@ import static org.hamcrest.Matchers.*;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Testcontainers
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@DisplayNameGeneration(SpacedDisplayNameGenerator.class)
 public class ReviewIntegrationContainerTest {
 
     @ServiceConnection
