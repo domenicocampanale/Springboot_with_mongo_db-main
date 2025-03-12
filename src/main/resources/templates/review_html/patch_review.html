@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patch Review</title>
+    <style>
+
+
+        body, h1, p, label, input, select, button, a {
+
+
+            margin: 0;
+
+
+            padding: 0;
+
+
+            font-family: 'Arial', sans-serif;
+
+
+        }
+
+
+        body {
+
+
+            background-color: #f4f4f9;
+
+
+            color: #333;
+
+
+            line-height: 1.6;
+
+
+            padding: 20px;
+
+
+        }
+
+
+        h1 {
+
+
+            text-align: center;
+
+
+            font-size: 36px;
+
+
+            color: #333;
+
+
+            margin-bottom: 20px;
+
+
+        }
+
+
+        .review-form {
+
+
+            background-color: #fff;
+
+
+            margin: 0 auto;
+
+
+            padding: 20px;
+
+
+            border-radius: 8px;
+
+
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+
+            width: 60%;
+
+
+            text-align: center;
+
+
+        }
+
+
+        .review-form div {
+
+
+            margin-bottom: 20px;
+
+
+        }
+
+
+        .review-form label {
+
+
+            font-size: 20px;
+
+
+            margin-bottom: 10px;
+
+
+            display: block;
+
+
+        }
+
+
+        .review-form select,
+        .review-form input {
+
+
+            width: 100%;
+
+
+            padding: 10px;
+
+
+            font-size: 16px;
+
+
+            border: 1px solid #ccc;
+
+
+            border-radius: 4px;
+
+
+            box-sizing: border-box;
+
+
+        }
+
+
+        .review-form button {
+
+
+            font-size: 20px;
+
+
+            color: #fff;
+
+
+            background-color: #4CAF50;
+
+
+            padding: 10px 20px;
+
+
+            border: none;
+
+
+            border-radius: 5px;
+
+
+            cursor: pointer;
+
+
+            transition: background-color 0.3s ease;
+
+
+        }
+
+
+        .review-form button:hover {
+
+
+            background-color: #45a049;
+
+
+        }
+
+
+        .error {
+
+
+            color: red;
+
+
+            font-size: 14px;
+
+
+        }
+
+
+        .navigation-links {
+
+
+            margin-top: 30px;
+
+
+            text-align: center;
+
+
+        }
+
+
+        .navigation-links a {
+
+
+            font-size: 20px;
+
+
+            color: #fff;
+
+
+            background-color: #4CAF50;
+
+
+            padding: 10px 20px;
+
+
+            text-decoration: none;
+
+
+            border-radius: 5px;
+
+
+            transition: background-color 0.3s ease;
+
+
+        }
+
+
+        .navigation-links a:hover {
+
+
+            background-color: #45a049;
+
+
+        }
+
+
+    </style>
+    <script>
+        function updateInputField() {
+            var selectedField = document.getElementById("fieldToUpdate").value;
+            var inputField = document.getElementById("updateValue");
+
+            if (selectedField === "rating") {
+                inputField.type = "number";
+                inputField.setAttribute("min", "1");
+                inputField.setAttribute("max", "5");
+            } else if (selectedField === "comment") {
+                inputField.type = "text";
+            }
+        }
+    </script>
+</head>
+<body>
+
+<h1>Patch Review</h1>
+
+<form th:action="@{/view/review/patch}" th:object="${reviewPatchDto}" method="post" class="review-form">
+    <input type="hidden" name="id" th:value="${id} ?: *{id}"/>
+
+    <div>
+        <label for="fieldToUpdate">Select field to update</label>
+        <select id="fieldToUpdate" name="fieldToUpdate" onchange="updateInputField()" required>
+            <option value="" disabled selected>-- Select a field --</option>
+            <option value="rating">Rating</option>
+            <option value="comment">Comment</option>
+        </select>
+    </div>
+
+    <div>
+        <label for="updateValue">New Value</label>
+        <input type="text" id="updateValue" name="updateValue" required/>
+
+        <div th:if="${#fields.hasErrors('rating')}" class="error">
+            <p th:each="err : ${#fields.errors('rating')}" th:text="${err}"></p>
+        </div>
+    </div>
+
+    <button type="submit">Patch Review</button>
+
+    <div th:if="${errorMessage != null}" class="error">
+        <p th:text="${errorMessage}"></p>
+    </div>
+
+    <div class="navigation-links">
+        <a href="/view/review/home">Home page</a>
+    </div>
+</form>
+
+</body>
+</html>

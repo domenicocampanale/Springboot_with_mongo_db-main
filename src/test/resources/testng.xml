@@ -1,0 +1,8 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="MovieE2ETestSuite">
+    <test name="Movie End-to-End Tests">
+        <classes>
+            <class name="com.stage.mongodb.TestNg_E2E.MovieE2ENgTest"/>
+        </classes>
+    </test>
+</suite>

@@ -3,6 +3,7 @@ package com.stage.mongodb.html_controller;
 import com.stage.mongodb.dto.ReviewDto;
 import com.stage.mongodb.dto.ReviewDtoInput;
 import com.stage.mongodb.dto.ReviewDtoUpdate;
+import com.stage.mongodb.dto.ReviewPatchDto;
 import com.stage.mongodb.repository.MovieRepository;
 import com.stage.mongodb.service.ReviewService;
 import jakarta.validation.Valid;
@@ -130,6 +131,61 @@ public class ReviewHtmlController {
             model.addAttribute("errorMessage", "Could not update review. Please try again.");
             model.addAttribute("id", id);
             return "review_html/edit_review";
+        }
+    }
+
+    @GetMapping("/patch")
+    public String showPatchReviewForm(@RequestParam String id, Model model) {
+        try {
+            ReviewDto reviewDto = reviewService.getReviewById(id);
+            ReviewPatchDto reviewPatchDto = ReviewPatchDto.builder()
+                    .rating(reviewDto.getRating())
+                    .comment(reviewDto.getComment())
+                    .build();
+            model.addAttribute("reviewPatchDto", reviewPatchDto);
+            model.addAttribute("id", id);
+            return "review_html/patch_review";
+        } catch (Exception e) {
+            log.error("Review not found for id: {}", id);
+            model.addAttribute("errorMessage", "Could not find review. Please try again.");
+            return "review_html/id_not_found";
+        }
+    }
+
+    @PostMapping("/patch")
+    public String patchReview(@RequestParam("id") String id,
+                              @ModelAttribute("reviewPatchDto") @Valid ReviewPatchDto reviewPatchDto,
+                              BindingResult bindingResult, Model model,
+                              @RequestParam("fieldToUpdate") String fieldToUpdate,
+                              @RequestParam("updateValue") String updateValue) {
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("id", id);
+            return "review_html/patch_review";
+        }
+
+        try {
+            if ("rating".equals(fieldToUpdate)) {
+                if (updateValue != null && !updateValue.isEmpty()) {
+                    reviewPatchDto.setRating(Integer.parseInt(updateValue));
+                } else {
+                    // Gestisci il caso in cui il rating è nullo o vuoto
+                    // Puoi impostare un valore predefinito o lasciare il rating invariato
+                    // Ad esempio:
+                    // reviewPatchDto.setRating(0); // Imposta il rating a 0
+                }
+            } else if ("comment".equals(fieldToUpdate)) {
+                reviewPatchDto.setComment(updateValue);
+            }
+
+            reviewService.updateReviewPartial(id, reviewPatchDto);
+            return "redirect:/view/review/list?success";
+        } catch (NumberFormatException e) {
+            model.addAttribute("errorMessage", "Invalid rating value. Please enter a number.");
+            return "review_html/patch_review";
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", "Could not update review. Please try again.");
+            return "review_html/patch_review";
         }
     }
 

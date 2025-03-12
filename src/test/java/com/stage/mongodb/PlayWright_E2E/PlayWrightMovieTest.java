@@ -1,9 +1,9 @@
 package com.stage.mongodb.PlayWright_E2E;
 
+import com.microsoft.playwright.Page;
+import com.microsoft.playwright.junit.UsePlaywright;
 import com.stage.mongodb.repository.MovieRepository;
 import com.stage.mongodb.utils.SpacedDisplayNameGenerator;
-import com.microsoft.playwright.*;
-import com.microsoft.playwright.junit.UsePlaywright;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -119,6 +119,35 @@ public class PlayWrightMovieTest {
 
     @Test
     @Order(12)
+    void testPatchMovieClientValidation(Page page) {
+        page.navigate("http://localhost:8080/view/movie/patch?id=" + movieId);
+        page.fill("#updateValue", "");
+        page.click("button");
+        assertEquals("http://localhost:8080/view/movie/patch?id=" + movieId, page.url());
+    }
+
+    @Test
+    @Order(13)
+    void testPatchMovieNotFound(Page page) {
+        page.navigate("http://localhost:8080/view/movie/patch?id=999");
+        assertTrue(page.locator(".error").isVisible());
+    }
+
+    @Test
+    @Order(14)
+    void testPatchPartialSuccess(Page page) {
+        page.navigate("http://localhost:8080/view/movie/patch?id=" + movieId);
+        page.selectOption("#fieldToUpdate", "title");
+        page.fill("#updateValue", "Film Solo Titolo Aggiornato");
+        page.click("button");
+        assertTrue(page.url().contains("list?success"));
+        page.navigate("http://localhost:8080/view/movie/details?id=" + movieId);
+        assertTrue(page.locator("text=Title: Film Solo Titolo Aggiornato").isVisible());
+    }
+
+
+    @Test
+    @Order(15)
     void testDeleteMovie(Page page) {
         page.navigate("http://localhost:8080/view/movie/delete?id=" + movieId);
         assertTrue(page.url().contains("list?success"));

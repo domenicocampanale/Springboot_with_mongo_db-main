@@ -1,47 +1,39 @@
-package com.stage.mongodb.Selenium_E2E;
+package com.stage.mongodb.TestNg_E2E;
 
-import com.stage.mongodb.repository.MovieRepository;
-import com.stage.mongodb.utils.SpacedDisplayNameGenerator;
 import io.github.bonigarcia.wdm.WebDriverManager;
-import org.junit.jupiter.api.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
 
 import java.time.Duration;
 import java.util.Objects;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertTrue;
 
 @SpringBootTest
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@DisplayNameGeneration(SpacedDisplayNameGenerator.class)
-public class MovieE2ETest {
-
-    @Autowired
-    private MovieRepository movieRepository;
+public class MovieE2ENgTest {
 
     private WebDriver driver;
     private String movieId;
 
-    @BeforeAll
-    void setup() {
-        movieRepository.deleteAll();
+    @BeforeClass
+    public void setup() {
         WebDriverManager.chromedriver().setup();
         driver = new ChromeDriver();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         driver.manage().window().maximize();
     }
 
-    @AfterAll
-    void tearDown() {
+    @AfterClass
+    public void tearDown() {
         if (driver != null) {
             driver.quit();
         }
@@ -60,33 +52,36 @@ public class MovieE2ETest {
         findElement(locator).click();
     }
 
-    @Test
-    @Order(1)
-    void testHomePage() {
+    @Test(priority = 1)
+    public void testHomePage() {
         navigateTo("home");
-        assertEquals("Movie Home Page", driver.getTitle());
+        assertEquals(driver.getTitle(), "Movie Home Page");
     }
 
-    @Test
-    @Order(2)
-    void testAddMovie() {
+    @Test(priority = 2)
+    public void testAddMovie() {
         navigateTo("add");
         clickButton(By.tagName("button"));
         assertTrue(Objects.requireNonNull(driver.getCurrentUrl()).contains("list?success"));
     }
 
-    @Test
-    @Order(3)
-    void testMovieList() {
+    @Test(priority = 3)
+    public void testMovieList() {
         navigateTo("list");
         WebElement movieListItem = findElement(By.tagName("li"));
         WebElement movieIdElement = movieListItem.findElement(By.xpath(".//p[contains(text(), 'Movie ID:')]"));
         movieId = movieIdElement.getText().split(": ")[1];
+
+        // Aggiungi un controllo per assicurarti che movieId non sia nullo
+        assertTrue(movieId != null && !movieId.isEmpty(), "Movie ID non trovato!");
     }
 
-    @Test
-    @Order(4)
-    void testEditMovie() {
+    @Test(priority = 4)
+    public void testEditMovie() {
+        if (movieId == null) {
+            throw new IllegalStateException("movieId non è stato inizializzato!");
+        }
+
         navigateTo("edit?id=" + movieId);
         WebElement titleField = findElement(By.id("title"));
         titleField.clear();
@@ -95,47 +90,45 @@ public class MovieE2ETest {
         assertTrue(Objects.requireNonNull(driver.getCurrentUrl()).contains("list?success"));
     }
 
-    @Test
-    @Order(5)
-    void testMovieFound() {
+    @Test(priority = 5)
+    public void testMovieFound() {
+        if (movieId == null) {
+            throw new IllegalStateException("movieId non è stato inizializzato!");
+        }
+
         navigateTo("details?id=" + movieId);
         assertTrue(findElement(By.xpath("//p[contains(text(), 'Title:')]")).isDisplayed());
         assertTrue(findElement(By.xpath("//p[contains(text(), 'Release Date:')]")).isDisplayed());
     }
 
-    @Test
-    @Order(6)
-    void testMovieNotFound() {
+    @Test(priority = 6)
+    public void testMovieNotFound() {
         navigateTo("details?id=999");
         assertTrue(findElement(By.className("error")).isDisplayed());
     }
 
-    @Test
-    @Order(7)
-    void testEditMovieNotFound() {
+    @Test(priority = 7)
+    public void testEditMovieNotFound() {
         navigateTo("edit?id=999");
         assertTrue(findElement(By.className("error")).isDisplayed());
     }
 
-    @Test
-    @Order(8)
-    void testDeleteMovieNotFound() {
+    @Test(priority = 8)
+    public void testDeleteMovieNotFound() {
         navigateTo("delete?id=999");
         assertTrue(findElement(By.className("error")).isDisplayed());
     }
 
-    @Test
-    @Order(9)
-    void testAddMovieClientValidation() {
+    @Test(priority = 9)
+    public void testAddMovieClientValidation() {
         navigateTo("add");
         findElement(By.id("title")).clear();
         clickButton(By.tagName("button"));
-        assertEquals("http://localhost:8080/view/movie/add", driver.getCurrentUrl());
+        assertEquals(driver.getCurrentUrl(), "http://localhost:8080/view/movie/add");
     }
 
-    @Test
-    @Order(10)
-    void testAddMovieWithInvalidData() {
+    @Test(priority = 10)
+    public void testAddMovieWithInvalidData() {
         navigateTo("add");
         findElement(By.id("title")).sendKeys("Test");
         findElement(By.id("releaseDate")).sendKeys("invalid-date");
@@ -143,9 +136,8 @@ public class MovieE2ETest {
         assertTrue(findElement(By.xpath("//div[contains(@class, 'error') and preceding-sibling::label[@for='releaseDate']]")).isDisplayed());
     }
 
-    @Test
-    @Order(11)
-    void testEditMovieWithInvalidData() {
+    @Test(priority = 11)
+    public void testEditMovieWithInvalidData() {
         navigateTo("edit?id=" + movieId);
         findElement(By.id("title")).sendKeys("Test");
         findElement(By.id("releaseDate")).sendKeys("invalid-date");
@@ -153,9 +145,8 @@ public class MovieE2ETest {
         assertTrue(findElement(By.xpath("//div[contains(@class, 'error') and preceding-sibling::label[@for='releaseDate']]")).isDisplayed());
     }
 
-    @Test
-    @Order(12)
-    void testPatchMovie() {
+    @Test(priority = 12)
+    public void testPatchMovie() {
         navigateTo("patch?id=" + movieId);
         WebElement fieldToUpdate = findElement(By.id("fieldToUpdate"));
         fieldToUpdate.sendKeys("title");
@@ -169,28 +160,23 @@ public class MovieE2ETest {
         assertTrue(titleElement.getText().contains("Film Aggiornato con PATCH"));
     }
 
-    @Test
-    @Order(13)
-    void testPatchMovieClientValidation() {
+    @Test(priority = 13)
+    public void testPatchMovieClientValidation() {
         navigateTo("patch?id=" + movieId);
         WebElement titleField = findElement(By.id("updateValue"));
         titleField.clear();
         clickButton(By.tagName("button"));
-        assertEquals("http://localhost:8080/view/movie/patch?id=" + movieId, driver.getCurrentUrl());
+        assertEquals(driver.getCurrentUrl(), "http://localhost:8080/view/movie/patch?id=" + movieId);
     }
 
-
-    @Test
-    @Order(14)
-    void testPatchMovieNotFound() {
+    @Test(priority = 14)
+    public void testPatchMovieNotFound() {
         navigateTo("patch?id=999");
         assertTrue(findElement(By.className("error")).isDisplayed());
     }
 
-    @Test
-    @Order(15)
-    void testPatchPartialSuccess() {
-
+    @Test(priority = 15)
+    public void testPatchPartialSuccess() {
         navigateTo("patch?id=" + movieId);
         WebElement fieldToUpdate = findElement(By.id("fieldToUpdate"));
         fieldToUpdate.sendKeys("title");
@@ -204,14 +190,9 @@ public class MovieE2ETest {
         assertTrue(titleElement.getText().contains("Film Solo Titolo Aggiornato"));
     }
 
-    @Test
-    @Order(17)
-    void testDeleteMovie() {
+    @Test(priority = 17)
+    public void testDeleteMovie() {
         navigateTo("delete?id=" + movieId);
         assertTrue(Objects.requireNonNull(driver.getCurrentUrl()).contains("list?success"));
     }
 }
-
-
-
-

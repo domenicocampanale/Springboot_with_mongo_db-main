@@ -2,6 +2,7 @@ package com.stage.mongodb.html_controller;
 
 import com.stage.mongodb.dto.MovieDto;
 import com.stage.mongodb.dto.MovieDtoInput;
+import com.stage.mongodb.dto.MoviePatchDto;
 import com.stage.mongodb.service.MovieService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -117,7 +118,7 @@ public class MovieHtmlController {
             return "movie_html/edit_movie";
         }
     }
-/*
+
     @GetMapping("/patch")
     public String showPatchMovieForm(@RequestParam String id, Model model) {
         try {
@@ -131,15 +132,12 @@ public class MovieHtmlController {
         }
     }
 
-
     @PostMapping("/patch")
-    public String patchMovie(@RequestParam String id,
-                             @Valid @ModelAttribute("moviePatchDto") MoviePatchDto moviePatchDto,
-                             BindingResult bindingResult, Model model) {
-        log.info("Request for partial update of movie with id {}", id);
-
+    public String patchMovie(@RequestParam("id") String id,
+                             @ModelAttribute("moviePatchDto") @Valid MoviePatchDto moviePatchDto,
+                             BindingResult bindingResult,
+                             Model model) {
         if (bindingResult.hasErrors()) {
-            log.warn("Validation errors in patch movie form: {}", bindingResult.getAllErrors());
             model.addAttribute("id", id);
             return "movie_html/patch_movie";
         }
@@ -148,12 +146,10 @@ public class MovieHtmlController {
             movieService.updateMoviePartial(id, moviePatchDto);
             return "redirect:/view/movie/list?success";
         } catch (Exception e) {
-            log.error("Error updating movie partially: {}", e.getMessage());
             model.addAttribute("errorMessage", "Could not update movie. Please try again.");
-            model.addAttribute("id", id);
             return "movie_html/patch_movie";
         }
-    }*/
+    }
 
 
     // Metodo per eliminare un film (DELETE)
