@@ -3,6 +3,7 @@ package com.stage.mongodb.html_controller;
 import com.stage.mongodb.dto.MovieDto;
 import com.stage.mongodb.dto.MovieDtoInput;
 import com.stage.mongodb.dto.MoviePatchDto;
+import com.stage.mongodb.repository.MovieRepository;
 import com.stage.mongodb.service.MovieService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,7 @@ import java.util.List;
 public class MovieHtmlController {
 
     private final MovieService movieService;
+    private final MovieRepository movieRepository;
 
     @GetMapping("/home")
     public String homeMovies() {
@@ -33,6 +35,13 @@ public class MovieHtmlController {
         log.info("Request for showing movie list view");
         List<MovieDto> moviesDto = movieService.getMovies();
         model.addAttribute("movies", moviesDto);
+        return "movie_html/movie_list";
+    }
+
+    @GetMapping("/reset")
+    public String resetMovies() {
+        log.info("Request for deleting movie list");
+        movieRepository.deleteAll();
         return "movie_html/movie_list";
     }
 
@@ -151,8 +160,6 @@ public class MovieHtmlController {
         }
     }
 
-
-    // Metodo per eliminare un film (DELETE)
     @GetMapping("/delete")
     public String deleteMovie(@RequestParam String id, Model model) {
         log.info("Request for deleting movie with id {}", id);

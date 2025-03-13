@@ -5,6 +5,7 @@ import com.stage.mongodb.dto.ReviewDtoInput;
 import com.stage.mongodb.dto.ReviewDtoUpdate;
 import com.stage.mongodb.dto.ReviewPatchDto;
 import com.stage.mongodb.repository.MovieRepository;
+import com.stage.mongodb.repository.ReviewRepository;
 import com.stage.mongodb.service.ReviewService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,7 @@ public class ReviewHtmlController {
 
     private final ReviewService reviewService;
     private final MovieRepository movieRepository;
+    private final ReviewRepository reviewRepository;
 
     @GetMapping("/home")
     public String homeReviews() {
@@ -37,6 +39,13 @@ public class ReviewHtmlController {
         log.info("Request for showing review list view");
         List<ReviewDto> reviewsDto = reviewService.getReviews();
         model.addAttribute("reviews", reviewsDto);
+        return "review_html/review_list";
+    }
+
+    @GetMapping("/reset")
+    public String resetReviews() {
+        log.info("Request for deleting review list");
+        reviewRepository.deleteAll();
         return "review_html/review_list";
     }
 
