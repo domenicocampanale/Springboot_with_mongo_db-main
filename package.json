@@ -23,6 +23,7 @@
     "@playwright/test": "^1.51.0"
   },
   "devDependencies": {
+    "cypress": "^14.2.0",
     "testcafe": "^3.7.2"
   }
 }
